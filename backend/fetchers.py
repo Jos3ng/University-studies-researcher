@@ -1,3 +1,4 @@
+import os
 import httpx
 import xml.etree.ElementTree as ET
 
@@ -15,10 +16,14 @@ async def search_semantic_scholar(query: str, limit: int = 8, year_from: int = N
     }
     if year_from:
         params["year"] = f"{year_from}-"
+    headers = {}
+    ss_key = os.environ.get("SEMANTIC_SCHOLAR_API_KEY")
+    if ss_key:
+        headers["x-api-key"] = ss_key
 
     try:
         async with httpx.AsyncClient(timeout=12) as client:
-            r = await client.get(url, params=params)
+            r = await client.get(url, params=params, headers=headers)
             r.raise_for_status()
             data = r.json().get("data", [])
 

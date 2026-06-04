@@ -60,7 +60,7 @@ async def search_arxiv(query: str, limit: int = 5, year_from: int = None) -> lis
     }
 
     try:
-        async with httpx.AsyncClient(timeout=12) as client:
+        async with httpx.AsyncClient(timeout=20) as client:
             r = await client.get(url, params=params)
             r.raise_for_status()
 
